@@ -1,0 +1,21 @@
+{
+	"Name" : "xia0.ForceRespawn",
+	"Description" : "Force players to respawn after a certain period of time",
+	"Version": "1.0",
+	"LoadPriority": 1,
+	"ConVars": [
+		{
+			"Name": "force_respawn_time",
+			"DefaultValue": "10"
+		}
+	],
+	"Scripts": [
+		{
+			"Path": "force_respawn.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "ForceRespawnInit"
+			}
+		}
+	]
+}
