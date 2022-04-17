@@ -11,5 +11,8 @@ void function OnPlayerKilled( entity player, entity attacker, var damageInfo ) {
 void function ForceRespawnPlayer(entity player, float delay) {
 	float lastSpawnTimeAtDeath = GetPlayerLastRespawnTime(player);
 	wait delay;
-	if (!IsAlive(player) && GetPlayerLastRespawnTime(player) == lastSpawnTimeAtDeath) RespawnAsPilot(player);
+	if (IsValidPlayer(player) && RespawnsEnabled() && !IsAlive(player) && GetPlayerLastRespawnTime(player) == lastSpawnTimeAtDeath) {
+		if (Riff_SpawnAsTitan() == 1) thread RespawnAsTitan(player);
+		else RespawnAsPilot(player);
+	}
 }
