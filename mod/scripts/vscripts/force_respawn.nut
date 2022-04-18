@@ -9,17 +9,22 @@ void function OnPlayerKilled( entity player, entity attacker, var damageInfo ) {
 }
 
 void function ForceRespawnPlayer(entity player, float delay = 0) {
-	float lastRespawnTimeAtDeath = GetPlayerLastRespawnTime(player);
-	wait delay;
-	if (IsValidPlayer(player)) {
-		if (RespawnsEnabled() && GetPlayerLastRespawnTime(player) == lastRespawnTimeAtDeath) {
-			//if (Riff_SpawnAsTitan() == 1) thread RespawnAsTitan(player);
-			//else RespawnAsPilot(player);
-			while(!IsAlive(player)) {
-				if (Riff_SpawnAsTitan() == 1) player.ClientCommand( "CC_RespawnPlayer Titan" );
-				else player.ClientCommand( "CC_RespawnPlayer Pilot" );
-			}
 
+	wait delay;
+	if (!IsValidPlayer(player)) return;
+	if (IsPlayerEliminated( player )) return;
+	if ( GetGameState() != eGameState.Playing && GetGameState() != eGameState.Epilogue && GetGameState() != eGameState.WinnerDetermined ) return;
+
+	while (IsValidPlayer(player)) {
+
+		if (IsAlive( player )) return;
+
+		if (!player.IsWatchingKillReplay() && IsRespawnAvailable( player )) {
+			if (Riff_SpawnAsTitan() == 1) ClientCommand(player, "CC_RespawnPlayer Titan");
+			else ClientCommand(player, "CC_RespawnPlayer Pilot");
 		}
+
+		WaitFrame();
 	}
+
 }
